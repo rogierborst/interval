@@ -13,7 +13,7 @@ export const useTimer = () => {
     const isPaused = computed(() => !isRunning.value && remainingTime.value > 0);
     const isFinished = computed(() => remainingTime.value <= 0);
     const currentSeconds = computed(() => Math.ceil(remainingTime.value / 1000));
-    const formattedTime = computed(() => formatTime(currentSeconds.value));
+    const formattedTime = computed(() => formatTime(remainingTime.value));
 
     // High precision timer update function
     const updateTimer = (currentTimestamp) => {
@@ -46,17 +46,23 @@ export const useTimer = () => {
 
     const startTimer = (durationInSeconds = null) => {
         if (durationInSeconds !== null) {
-            console.log('starting timer with new duration', durationInSeconds);
             const durationInMs = durationInSeconds * 1000;
-            setTime(durationInSeconds);
+            remainingTime.value = durationInMs;
             initialTime.value = durationInMs;
             pausedDuration = 0;
         }
 
         if (isRunning.value || remainingTime.value <= 0) return;
 
+        const now = performance.now();
         isRunning.value = true;
-        startTimestamp = performance.now();
+
+        if (startTimestamp === null) {
+            startTimestamp = now;
+        } else {
+            startTimestamp = now - (initialTime.value - remainingTime.value);
+        }
+
         animationFrameId = requestAnimationFrame(updateTimer);
     };
 
@@ -71,20 +77,9 @@ export const useTimer = () => {
         }
     }
 
-    const resumeTimer = () => {
-        if (isRunning.value || remainingTime.value <= 0) return;
-
-        isRunning.value = true;
-
-        const pauseStartTime = startTimestamp + pausedDuration;
-        const now = performance.now();
-        pausedDuration += (now - pauseStartTime) - (initialTime.value - remainingTime.value);
-        startTimestamp = now - (initialTime.value - remainingTime.value);
-
-        animationFrameId = requestAnimationFrame(updateTimer);
-    }
-
     const stopTimer = () => {
+        if (!isRunning.value) return;
+        
         isRunning.value = false;
         pausedDuration = 0;
 
@@ -119,7 +114,6 @@ export const useTimer = () => {
 
         startTimer,
         pauseTimer,
-        resumeTimer,
         stopTimer,
         resetTimer,
         setTime,
