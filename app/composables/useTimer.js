@@ -79,7 +79,7 @@ export const useTimer = () => {
 
     const stopTimer = () => {
         if (!isRunning.value) return;
-        
+
         isRunning.value = false;
         pausedDuration = 0;
 
