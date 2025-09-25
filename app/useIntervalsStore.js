@@ -4,11 +4,11 @@ export const useIntervalsStore = defineStore('intervals', () => {
     const intervals = ref([
         {
             type: 'walk',
-            length: 90,
+            length: 5,
         },
         {
             type: 'run',
-            length: 180,
+            length: 5,
         },
     ]);
 

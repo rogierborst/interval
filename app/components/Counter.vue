@@ -1,11 +1,13 @@
-<script setup lang="ts">
+<script setup>
 import { useIntervalsStore } from '~/useIntervalsStore';
 const intervalsStore = useIntervalsStore();
 const { activeInterval } = storeToRefs(intervalsStore);
 
 const {
-    formattedTime, startTimer, pauseTimer, resetTimer, setTime, isRunning
+    formattedTime, startTimer, pauseTimer, resetTimer, setTime, isRunning, isFinished,
 } = useTimer();
+const emit = defineEmits(['finished']);
+
 
 const toggleTimer = () => {
     if (isRunning.value) {
@@ -16,8 +18,17 @@ const toggleTimer = () => {
 }
 
 onMounted(() => {
-    console.log('mounted', activeInterval);
     setTime(activeInterval.value.length ?? 0);
+});
+
+watch(() => activeInterval.value, (newInterval) => {
+    setTime(newInterval.length ?? 0);
+    startTimer();
+})
+watch(() => isFinished.value, (finished) => {
+    if (!finished) return;
+
+    emit('finished');
 });
 </script>
 

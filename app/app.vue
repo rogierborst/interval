@@ -29,8 +29,8 @@ useHead({ title: 'Interval 🏃🏼‍♂️' });
         />
 
         <div class="px-4 py-2">
-            <Counter v-if="hasActiveInterval" />
-            <BaseButton v-else="!hasActiveInterval" @click="activateInterval">Volgende</BaseButton>
+            <Counter v-if="hasActiveInterval" @finished="activateInterval" />
+            <BaseButton v-else @click="activateInterval">Volgende</BaseButton>
         </div>
 
         <h2 class="font-bold text-xl">Done</h2>
