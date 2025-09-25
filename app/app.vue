@@ -1,21 +1,45 @@
 <script setup>
-const intervals = [
-    {
-        type: 'walk',
-        length:120,
-    },
-    {
-        type: 'run',
-        length: 60,
-    },
-]
+
+import { useIntervalsStore } from '~/useIntervalsStore.js';
+
+const intervalsStore = useIntervalsStore();
+const {
+    intervals,
+    finishedIntervals,
+    hasActiveInterval
+} = storeToRefs(intervalsStore);
+
+const { activateInterval } = useIntervalsStore();
+
+useHead({ title: 'Interval 🏃🏼‍♂️' });
 </script>
 
 <template>
     <div>
         <NuxtRouteAnnouncer />
         <BaseHeader>Interval</BaseHeader>
-        <Counter :seconds="60" />
-        <Interval v-for="(interval, index) in intervals" :key="index" :type="interval.type" :length="interval.length" />
+
+        <h2 class="font-bold text-xl">To Do</h2>
+        <Interval
+            v-for="(interval, index) in intervals"
+            :key="index"
+            :type="interval.type"
+            :length="interval.length"
+            class="px-4"
+        />
+
+        <div class="px-4 py-2">
+            <Counter v-if="hasActiveInterval" />
+            <BaseButton v-else="!hasActiveInterval" @click="activateInterval">Volgende</BaseButton>
+        </div>
+
+        <h2 class="font-bold text-xl">Done</h2>
+        <Interval
+            v-for="(interval, index) in finishedIntervals"
+            :key="index"
+            :type="interval.type"
+            :length="interval.length"
+            class="px-4"
+        />
     </div>
 </template>
