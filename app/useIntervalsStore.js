@@ -4,11 +4,19 @@ export const useIntervalsStore = defineStore('intervals', () => {
     const intervals = ref([
         {
             type: 'walk',
-            length: 5,
+            length: 3,
         },
         {
             type: 'run',
-            length: 5,
+            length: 6,
+        },
+        {
+            type: 'walk',
+            length: 3,
+        },
+        {
+            type: 'run',
+            length: 6,
         },
     ]);
 
@@ -20,12 +28,13 @@ export const useIntervalsStore = defineStore('intervals', () => {
         return activeInterval.value !== null;
     });
 
-    const activateInterval = () => {
+    const nextInterval = () => {
         if (activeInterval.value) {
             finishedIntervals.value.push(activeInterval.value);
         }
+
         activeInterval.value = intervals.value.shift();
     }
 
-    return { intervals, activeInterval, finishedIntervals, activateInterval, hasActiveInterval };
+    return { intervals, activeInterval, finishedIntervals, nextInterval, hasActiveInterval };
 });
