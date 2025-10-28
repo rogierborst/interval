@@ -1,57 +1,34 @@
 <script setup>
-import { useIntervalsStore } from '~/useIntervalsStore';
-const intervalsStore = useIntervalsStore();
-const { activeInterval } = storeToRefs(intervalsStore);
+const emit = defineEmits(['toggle', 'reset']);
 
-const {
-    formattedTime, startTimer, pauseTimer, resetTimer, setTime, isRunning, isFinished,
-} = useTimer();
-const emit = defineEmits(['finished']);
+defineProps({
+    time: { type: String, default: 'o jee' },
+    color: { type: String, default: 'text-white' },
+});
 
-const clickCounter = ref(0);
+let clickCount = 0;
 let clickTimer;
 
-const toggleTimer = () => {
-    if (isRunning.value) {
-        pauseTimer();
-    } else {
-        startTimer();
-    }
-}
-
-onMounted(() => {
-    setTime(activeInterval.value.length ?? 0);
-});
-
-watch(() => activeInterval.value, (newInterval) => {
-    setTime(newInterval.length ?? 0);
-    startTimer();
-});
-watch(() => isFinished.value, (finished) => {
-    if (!finished) return;
-
-    emit('finished');
-});
-
-const color = computed(() => {
-    return activeInterval.value.type === 'walk' ? 'text-green-600' : 'text-amber-600';
-});
-
+/**
+ * Manually handle single and double clicks.
+ * 'toggle' will be emitted immediately after the first click.
+ * If a second click occurs within 250 ms, 'reset' will be emitted afterward.
+ * This allows single clicks to remain snappy.
+ */
 const handleClick = () => {
-    clickCounter.value++;
+    clickCount++;
 
-    if (clickCounter.value === 1) {
-        // Toggle timer after first click
-        toggleTimer();
+    if (clickCount === 1) {
+        emit('toggle');
 
         clickTimer = setTimeout(() => {
-            clickCounter.value = 0;
+            clickCount = 0;
         }, 250);
     } else {
         // If dbl click is detected, reset the timer
         clearTimeout(clickTimer);
-        clickCounter.value = 0;
-        resetTimer();
+        emit('reset');
+        clickCount = 0;
     }
 }
 </script>
@@ -61,6 +38,6 @@ const handleClick = () => {
         class="bg-stone-900 border border-stone-950 rounded-md p-3 text-center"
         @click="handleClick"
     >
-        <div class="text-6xl font-bold font-time" :class="color" v-text="formattedTime" />
+        <div class="text-6xl font-bold font-time" :class="color" v-text="time" />
     </div>
 </template>

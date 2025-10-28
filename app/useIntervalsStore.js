@@ -1,55 +1,31 @@
 import { defineStore } from 'pinia';
-
-const intervals = [
-    {
-        type: 'walk',
-        length: 3,
-    },
-    {
-        type: 'run',
-        length: 6,
-    },
-    {
-        type: 'walk',
-        length: 3,
-    },
-    {
-        type: 'run',
-        length: 6,
-    },
-];
+import defaultIntervals from '~/config/defaultIntervals';
 
 export const useIntervalsStore = defineStore('intervals', () => {
     const activeInterval = ref(null);
-
-    const upcomingIntervals = ref(intervals.map(interval => ({ ...interval })));
+    const upcomingIntervals = ref(defaultIntervals.map(interval => ({ ...interval })));
     const finishedIntervals = ref([]);
 
-    const hasActiveInterval = computed(() => {
-        return activeInterval.value !== null;
-    });
-
-    const nextInterval = () => {
+    const activateNextInterval = () => {
         if (activeInterval.value) {
             finishedIntervals.value.push(activeInterval.value);
         }
 
-        activeInterval.value = upcomingIntervals.value.shift();
+        activeInterval.value = upcomingIntervals.value.shift() ?? null;
     }
 
     const resetIntervals = () => {
-        upcomingIntervals.value = intervals.map(interval => ({ ...interval }));
+        upcomingIntervals.value = defaultIntervals.map(interval => ({ ...interval }));
         finishedIntervals.value = [];
         activeInterval.value = null;
-        nextInterval();
+        activateNextInterval();
     }
 
     return {
         activeInterval,
         upcomingIntervals,
         finishedIntervals,
-        nextInterval,
+        activateNextInterval,
         resetIntervals,
-        hasActiveInterval
     };
 });

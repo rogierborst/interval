@@ -1,16 +1,24 @@
 <script setup>
-
 import { useIntervalsStore } from '~/useIntervalsStore.js';
 
 const intervalsStore = useIntervalsStore();
-const {
-    upcomingIntervals,
-    finishedIntervals,
-    hasActiveInterval
-} = storeToRefs(intervalsStore);
-const { nextInterval, resetIntervals } = intervalsStore;
+const { upcomingIntervals, finishedIntervals } = intervalsStore;
 
-onMounted(async () => nextInterval());
+const workout = useWorkoutController();
+
+const { formatted, isRunning } = workout;
+
+onMounted(() => {
+    workout.selectNext();
+})
+
+const toggleTimer = () => {
+    if (isRunning.value) {
+        workout.pause();
+    } else {
+        workout.start();
+    }
+}
 
 useHead({ title: 'Interval 🏃🏼‍♂️' });
 </script>
@@ -18,10 +26,10 @@ useHead({ title: 'Interval 🏃🏼‍♂️' });
 <template>
     <div class="bg-stone-800 min-h-dvh">
         <NuxtRouteAnnouncer />
-        <BaseHeader @click="resetIntervals">Interval</BaseHeader>
+        <BaseHeader @click="workout.resetWorkout">Interval</BaseHeader>
 
         <div class="px-4 py-2">
-            <Counter v-if="hasActiveInterval" @finished="nextInterval" />
+            <Counter :time="formatted" @toggle="toggleTimer" @reset="workout.reset" />
         </div>
 
         <h2 v-if="upcomingIntervals.length" class="p-3 font-bold text-xl">To Do</h2>

@@ -1,122 +1,46 @@
 import { formatTime } from '~/utils/time.js';
 
 export const useTimer = () => {
-    const remainingTime = ref(0);
-    const initialTime = ref(0);
+    const remaining = ref(0);
+    const initial = ref(0);
     const isRunning = ref(false);
+    let startTime = null, frameId = null;
 
-    // Track timing for precision
-    let startTimestamp = null;
-    let pausedDuration = 0;
-    let animationFrameId = null;
-
-    const isPaused = computed(() => !isRunning.value && remainingTime.value > 0);
-    const isFinished = computed(() => remainingTime.value <= 0);
-    const currentSeconds = computed(() => Math.ceil(remainingTime.value / 1000));
-    const formattedTime = computed(() => formatTime(remainingTime.value));
-
-    // High precision timer update function
-    const updateTimer = (currentTimestamp) => {
-        if (!isRunning.value) return;
-
-        const elapsed = currentTimestamp - startTimestamp - pausedDuration;
-        const newRemainingTime = initialTime.value - elapsed;
-
-        if (newRemainingTime <= 0) {
-            setTime(0);
-            stopTimer();
-            return;
-        }
-
-        remainingTime.value = newRemainingTime;
-        animationFrameId = requestAnimationFrame(updateTimer);
-    }
+    const isFinished = computed(() => remaining.value <= 0);
+    const formatted = computed(() => formatTime(remaining.value));
 
     const setTime = (seconds) => {
-        // @todo: maybe we want to be able to set the time without stopping the timer.
-        // If so, remove the next if clause.
-        if (isRunning.value) {
-            stopTimer();
-        }
+        const ms = seconds * 1000;
+        remaining.value = ms;
+        initial.value = ms;
+        startTime = null;
+    };
 
-        const durationInMs = seconds * 1000;
-        remainingTime.value = durationInMs;
-        initialTime.value = durationInMs;
-    }
+    const update = (now) => {
+        if (!isRunning.value) return;
+        const elapsed = now - startTime;
+        remaining.value = Math.max(initial.value - elapsed, 0);
+        if (remaining.value > 0) frameId = requestAnimationFrame(update);
+    };
 
-    const startTimer = (durationInSeconds = null) => {
-        if (durationInSeconds !== null) {
-            const durationInMs = durationInSeconds * 1000;
-            remainingTime.value = durationInMs;
-            initialTime.value = durationInMs;
-            pausedDuration = 0;
-        }
-
-        if (isRunning.value || remainingTime.value <= 0) return;
-
-        const now = performance.now();
+    const start = () => {
+        if (remaining.value <= 0) return;
         isRunning.value = true;
-
-        if (startTimestamp === null) {
-            startTimestamp = now;
-        } else {
-            startTimestamp = now - (initialTime.value - remainingTime.value);
-        }
-
-        animationFrameId = requestAnimationFrame(updateTimer);
+        startTime = performance.now() - (initial.value - remaining.value);
+        frameId = requestAnimationFrame(update);
     };
 
-    const pauseTimer = () => {
-        if (!isRunning.value) return;
-
+    const pause = () => {
         isRunning.value = false;
-
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-    }
-
-    const stopTimer = () => {
-        if (!isRunning.value) return;
-
-        isRunning.value = false;
-        pausedDuration = 0;
-
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-    }
-
-    const resetTimer = () => {
-        stopTimer();
-        remainingTime.value = initialTime.value;
-    }
-
-    // Get precise remaining time in seconds (with decimals)
-    const getPreciseRemainingSeconds = () => remainingTime.value / 1000;
-
-    onUnmounted(() => {
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-        }
-    });
-
-    return {
-        currentSeconds: readonly(currentSeconds),
-        remainingTimeMs: readonly(remainingTime),
-        initialTime: readonly(computed(() => initialTime.value / 1000)),
-        isRunning: readonly(isRunning),
-        isPaused: readonly(isPaused),
-        isFinished: isFinished,
-        formattedTime,
-
-        startTimer,
-        pauseTimer,
-        stopTimer,
-        resetTimer,
-        setTime,
-        getPreciseRemainingSeconds,
+        cancelAnimationFrame(frameId);
     };
-}
+
+    const reset = () => {
+        pause();
+        remaining.value = initial.value;
+    };
+
+    onUnmounted(() => cancelAnimationFrame(frameId));
+
+    return { isRunning, isFinished, formatted, setTime, start, pause, reset };
+};
