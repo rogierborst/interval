@@ -2,7 +2,7 @@
 import { useIntervalsStore } from '~/useIntervalsStore.js';
 
 const intervalsStore = useIntervalsStore();
-const { upcomingIntervals, finishedIntervals } = intervalsStore;
+const { upcomingIntervals, finishedIntervals } = storeToRefs(intervalsStore);
 
 const workout = useWorkoutController();
 
