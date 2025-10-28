@@ -42,5 +42,5 @@ export const useTimer = () => {
 
     onUnmounted(() => cancelAnimationFrame(frameId));
 
-    return { isRunning, isFinished, formatted, setTime, start, pause, reset };
+    return { isRunning, isFinished, formatted, remaining, setTime, start, pause, reset };
 };

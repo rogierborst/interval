@@ -5,6 +5,7 @@ const intervalsStore = useIntervalsStore();
 const { upcomingIntervals, finishedIntervals } = storeToRefs(intervalsStore);
 
 const workout = useWorkoutController();
+useCountdownAudio(workout);
 
 const { formatted, isRunning } = workout;
 
