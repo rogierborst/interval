@@ -30,11 +30,15 @@ watch(() => isFinished.value, (finished) => {
 
     emit('finished');
 });
+
+const color = computed(() => {
+    return activeInterval.value.type === 'walk' ? 'text-green-600' : 'text-amber-600';
+})
 </script>
 
 <template>
     <div class="bg-stone-900 border border-stone-950 rounded-md p-3">
-        <div class="text-6xl font-bold mb-4 font-time" v-text="formattedTime" />
+        <div class="text-6xl font-bold mb-4 font-time" :class="color" v-text="formattedTime" />
 
         <div class="flex justify-between">
             <BaseButton @click="toggleTimer">{{ isRunning ? 'Pauze' : 'Start' }}</BaseButton>
