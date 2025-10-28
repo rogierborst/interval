@@ -1,4 +1,13 @@
 export const useCountdownAudio = (timer) => {
+    if (process.server) return;
+
+    const audioFiles = {};
+
+    for (let i = 0; i <= 5; i++) {
+        audioFiles[i] = new Audio(`/audio/Laura/${i}.wav`);
+        audioFiles[i].preload = 'auto';
+    }
+
     const remainingSeconds = computed(() => Math.floor(timer.remaining.value / 1000));
     let lastSecond = -1;
 
@@ -6,8 +15,9 @@ export const useCountdownAudio = (timer) => {
         if (!timer.isRunning.value) return;
 
         if (seconds !== lastSecond && seconds >= 0 && seconds <= 5) {
-            const audio = new Audio(`/audio/Laura/${seconds}.wav`);
-            audio.play().catch(err => console.warn('Could not play audio:', err));
+            // Reset audio to start in case it's still playing from before
+            audioFiles[seconds].currentTime = 0;
+            audioFiles[seconds].play().catch(err => console.warn('Could not play audio:', err));
             lastSecond = seconds;
         }
     });
