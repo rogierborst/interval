@@ -14,8 +14,8 @@ defineProps({
 </script>
 
 <template>
-<div class="flex gap-1 bg-slate-300">
-    <div>{{ formatTime(length * 1000)}}</div>
+<div class="flex gap-3 bg-stone-300">
+    <div class="text-3xl font-time" v-text="formatTime(length * 1000)" />
     <div v-text="type" />
 </div>
 </template>

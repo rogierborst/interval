@@ -3,7 +3,7 @@
 </script>
 
 <template>
-<h1 class="bg-stone-600 px-4 py-6 font-bold text-white text-3xl">
+<h1 class="bg-stone-900 px-3 py-4 font-bold text-stone-700 text-3xl">
     <slot />
 </h1>
 </template>

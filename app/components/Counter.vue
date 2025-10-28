@@ -33,9 +33,12 @@ watch(() => isFinished.value, (finished) => {
 </script>
 
 <template>
-    <div class="flex gap-2 items-center pb-4">
-        <div class="text-3xl font-bold">{{ formattedTime }}</div>
-        <BaseButton @click="toggleTimer">{{ isRunning ? 'Pauze' : 'Start' }}</BaseButton>
-        <BaseButton @click="resetTimer">Reset</BaseButton>
+    <div class="bg-stone-900 border border-stone-950 rounded-md p-3">
+        <div class="text-6xl font-bold mb-4 font-time" v-text="formattedTime" />
+
+        <div class="flex justify-between">
+            <BaseButton @click="toggleTimer">{{ isRunning ? 'Pauze' : 'Start' }}</BaseButton>
+            <BaseButton @click="resetTimer">Reset</BaseButton>
+        </div>
     </div>
 </template>
