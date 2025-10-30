@@ -3,42 +3,30 @@ import defaultIntervals from '~/config/defaultIntervals';
 
 export const useIntervalsStore = defineStore('intervals', () => {
     const activeIntervalIndex = ref(-1);
-    const intervals = ref([]);
+    const intervals = ref(defaultIntervals);
 
-    const initIntervals = () => {
-        intervals.value = defaultIntervals.map((interval) => {
-            return {
-                ...interval,
-                finished: false,
-            };
-        });
-    };
-
-    initIntervals();
+    const intervalsWithState = computed(() =>
+        intervals.value.map((interval, index) => ({
+            ...interval,
+            isActive: index === activeIntervalIndex.value,
+            isFinished: index < activeIntervalIndex.value,
+        }))
+    );
 
     const activeInterval = computed(() => intervals.value[activeIntervalIndex.value]);
-    const upcomingIntervals = computed(() => intervals.value.filter((interval) => !interval.finished));
-    const finishedIntervals = computed(() => intervals.value.filter((interval) => interval.finished));
 
     const activateNextInterval = () => {
-        if (activeInterval.value) {
-            activeInterval.value.finished = true;
-        }
-
         activeIntervalIndex.value++;
     }
 
     const resetIntervals = () => {
-        initIntervals();
         activeIntervalIndex.value = 0;
     }
 
     return {
         activeInterval,
         activateNextInterval,
-        finishedIntervals,
-        intervals,
+        intervals: intervalsWithState,
         resetIntervals,
-        upcomingIntervals,
     };
 });

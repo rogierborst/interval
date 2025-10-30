@@ -8,11 +8,11 @@ const props = defineProps({
     }
 });
 
-const classes = computed(() => {
-    return props.interval.type === 'walk'
-        ? 'bg-lime-800 text-lime-200'
-        : 'bg-rose-800 text-rose-200';
-})
+const classes = computed(() => [
+    { 'bg-lime-800 text-lime-200' : props.interval.type === 'walk' },
+    { 'bg-rose-800 text-rose-200' : props.interval.type === 'run' },
+    { 'ring-4 ring-white' : props.interval.isActive }
+]);
 </script>
 
 <template>

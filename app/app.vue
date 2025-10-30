@@ -3,7 +3,7 @@ import { useIntervalsStore } from '~/useIntervalsStore.js';
 import IntervalsList from '~/components/IntervalsList.vue';
 
 const intervalsStore = useIntervalsStore();
-const { intervals } = storeToRefs(intervalsStore);
+const { intervals, activeInterval } = storeToRefs(intervalsStore);
 
 const workout = useWorkoutController();
 useCountdownAudio(workout);
@@ -31,7 +31,12 @@ useHead({ title: 'Interval 🏃🏼‍♂️' });
         <BaseHeader @click="workout.resetWorkout">Interval</BaseHeader>
 
         <div class="p-4">
-            <Counter :time="formatted" @toggle="toggleTimer" @reset="workout.reset" />
+            <Counter
+                :time="formatted"
+                :color="activeInterval.type === 'walk' ? 'text-lime-300' : 'text-rose-300'"
+                @toggle="toggleTimer"
+                @reset="workout.reset"
+            />
         </div>
 
         <IntervalsList :intervals />
