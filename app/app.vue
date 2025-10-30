@@ -1,14 +1,8 @@
 <script setup>
-import { useIntervalsStore } from '~/useIntervalsStore.js';
-import IntervalsList from '~/components/IntervalsList.vue';
-
-const intervalsStore = useIntervalsStore();
-const { intervals, activeInterval } = storeToRefs(intervalsStore);
-
 const workout = useWorkoutController();
 useCountdownAudio(workout);
 
-const { formatted, isRunning } = workout;
+const { formatted, isRunning, intervals, activeInterval } = workout;
 
 onMounted(() => {
     workout.selectNext();
@@ -33,7 +27,7 @@ useHead({ title: 'Interval 🏃🏼‍♂️' });
         <div class="p-4">
             <Counter
                 :time="formatted"
-                :color="activeInterval.type === 'walk' ? 'text-lime-300' : 'text-rose-300'"
+                :color="activeInterval?.type === 'walk' ? 'text-lime-300' : 'text-rose-300'"
                 @toggle="toggleTimer"
                 @reset="workout.reset"
             />
