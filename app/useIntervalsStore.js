@@ -30,8 +30,7 @@ export const useIntervalsStore = defineStore('intervals', () => {
 
     const resetIntervals = () => {
         initIntervals();
-        activeInterval.value = null;
-        activateNextInterval();
+        activeIntervalIndex.value = 0;
     }
 
     return {
