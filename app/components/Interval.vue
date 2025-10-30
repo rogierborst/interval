@@ -19,6 +19,6 @@ const classes = computed(() => [
     <div
         class="text-3xl font-time px-3 py-2 rounded"
         :class="classes"
-        v-text="formatTime(interval.length * 1000)"
+        v-text="formatTime(interval.timeRemaining)"
     />
 </template>
