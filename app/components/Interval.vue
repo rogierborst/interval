@@ -20,5 +20,9 @@ const classes = computed(() => {
 </script>
 
 <template>
-    <div class="text-3xl font-time px-3 py-2" :class="classes" v-text="formatTime(length * 1000)" />
+    <div
+        class="text-3xl font-time px-3 py-2 rounded"
+        :class="classes"
+        v-text="formatTime(length * 1000)"
+    />
 </template>

@@ -35,7 +35,7 @@ const handleClick = () => {
 
 <template>
     <div
-        class="bg-stone-900 border border-stone-950 rounded-md p-3 text-center"
+        class="bg-stone-900 border border-stone-950 rounded-md px-3 py-6 text-center"
         @click="handleClick"
     >
         <div class="text-6xl font-bold font-time" :class="color" v-text="time" />

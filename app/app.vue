@@ -30,11 +30,10 @@ useHead({ title: 'Interval 🏃🏼‍♂️' });
         <NuxtRouteAnnouncer />
         <BaseHeader @click="workout.resetWorkout">Interval</BaseHeader>
 
-        <div class="px-4 py-2">
+        <div class="p-4">
             <Counter :time="formatted" @toggle="toggleTimer" @reset="workout.reset" />
         </div>
 
-        <h2 v-if="intervals.length" class="p-3 font-bold text-xl">Intervals</h2>
         <IntervalsList :intervals />
     </div>
 </template>

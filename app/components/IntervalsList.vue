@@ -8,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-<div class="flex flex-wrap justify-center">
+<div class="flex flex-wrap gap-1 justify-center">
     <Interval
         v-for="(interval, index) in intervals"
         :key="index"
