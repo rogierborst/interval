@@ -8,12 +8,12 @@ defineProps({
 </script>
 
 <template>
-<div class="grid grid-cols-8">
+<div class="flex flex-wrap gap-1 justify-center">
     <Interval
         v-for="(interval, index) in intervals"
         :key="index"
-        :type="interval.type"
-        :length="interval.length"
+        :interval
+        :class="interval.isFinished ? 'opacity-30' : 'opacity-100'"
     />
 </div>
 </template>

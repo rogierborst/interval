@@ -1,22 +1,44 @@
 import { useIntervalsStore } from '~/useIntervalsStore.js';
 
 export const useWorkoutController = () => {
-    const intervals = useIntervalsStore();
+    const intervalsStore = useIntervalsStore();
     const timer = useTimer();
 
+    const intervals = computed(() =>
+        intervalsStore.intervals.map((interval, index) => ({
+            ...interval,
+            isActive: index === intervalsStore.activeIntervalIndex,
+            isFinished: index < intervalsStore.activeIntervalIndex,
+            timeRemaining: index === intervalsStore.activeIntervalIndex
+                ? timer.remaining.value
+                : interval.length * 1000
+        }))
+    );
+
+    const activeInterval = computed(() => intervals.value[intervalsStore.activeIntervalIndex]);
+
+    /**
+     * Activate the next interval and set the timer to that interval's length.
+     */
     const selectNext = () => {
-        intervals.activateNextInterval();
-        timer.setTime(intervals.activeInterval?.length ?? 0);
+        intervalsStore.activateNextInterval();
+        timer.setTime(activeInterval.value?.length ?? 0);
     }
 
+    /**
+     * Activate the next interval and start its timer.
+     */
     const startNext = () => {
         selectNext();
-        if (!intervals.activeInterval) return;
+        if (!activeInterval.value) return;
         timer.start();
     }
 
+    /**
+     * Reset everything; all intervals are set to unfinished and the timer is reset.
+     */
     const resetWorkout = () => {
-        intervals.resetIntervals();
+        intervalsStore.resetIntervals();
         timer.reset();
     }
 
@@ -25,7 +47,5 @@ export const useWorkoutController = () => {
         if (done) startNext();
     });
 
-    return {
-        ...timer, ...intervals, selectNext, startNext, resetWorkout,
-    };
+    return { ...timer, intervals, activeInterval, selectNext, startNext, resetWorkout };
 }

@@ -4,7 +4,8 @@ export const useTimer = () => {
     const remaining = ref(0);
     const initial = ref(0);
     const isRunning = ref(false);
-    let startTime = null, frameId = null;
+    let startTime = null;
+    let frameId = null;
 
     const isFinished = computed(() => remaining.value <= 0);
     const formatted = computed(() => formatTime(remaining.value));

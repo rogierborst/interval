@@ -2,30 +2,16 @@ import { defineStore } from 'pinia';
 import defaultIntervals from '~/config/defaultIntervals';
 
 export const useIntervalsStore = defineStore('intervals', () => {
-    const activeInterval = ref(null);
-    const upcomingIntervals = ref(defaultIntervals.map(interval => ({ ...interval })));
-    const finishedIntervals = ref([]);
+    const activeIntervalIndex = ref(-1);
+    const intervals = ref(defaultIntervals);
 
-    const activateNextInterval = () => {
-        if (activeInterval.value) {
-            finishedIntervals.value.push(activeInterval.value);
-        }
-
-        activeInterval.value = upcomingIntervals.value.shift() ?? null;
-    }
-
-    const resetIntervals = () => {
-        upcomingIntervals.value = defaultIntervals.map(interval => ({ ...interval }));
-        finishedIntervals.value = [];
-        activeInterval.value = null;
-        activateNextInterval();
-    }
+    const activateNextInterval = () => activeIntervalIndex.value++;
+    const resetIntervals = () => activeIntervalIndex.value = 0;
 
     return {
-        activeInterval,
-        upcomingIntervals,
-        finishedIntervals,
         activateNextInterval,
+        intervals,
+        activeIntervalIndex,
         resetIntervals,
     };
 });
