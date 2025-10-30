@@ -12,11 +12,13 @@ const props = defineProps({
     }
 });
 
-const background = computed(() => {
-    return props.type === 'walk' ? 'bg-green-500/20' : 'bg-amber-500/20';
+const classes = computed(() => {
+    return props.type === 'walk'
+        ? 'bg-lime-800 text-lime-200'
+        : 'bg-rose-800 text-rose-200';
 })
 </script>
 
 <template>
-    <div class="text-3xl font-time" :class="background" v-text="formatTime(length * 1000)" />
+    <div class="text-3xl font-time px-3 py-2" :class="classes" v-text="formatTime(length * 1000)" />
 </template>
