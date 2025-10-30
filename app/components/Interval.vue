@@ -2,18 +2,14 @@
 import { formatTime } from '~/utils/time.js';
 
 const props = defineProps({
-    length: {
-        type: Number,
-        default: 60
-    },
-    type: {
-        type: String,
-        default: 'walk'
+    interval: {
+        type: Object,
+        required: true,
     }
 });
 
 const classes = computed(() => {
-    return props.type === 'walk'
+    return props.interval.type === 'walk'
         ? 'bg-lime-800 text-lime-200'
         : 'bg-rose-800 text-rose-200';
 })
@@ -23,6 +19,6 @@ const classes = computed(() => {
     <div
         class="text-3xl font-time px-3 py-2 rounded"
         :class="classes"
-        v-text="formatTime(length * 1000)"
+        v-text="formatTime(interval.length * 1000)"
     />
 </template>

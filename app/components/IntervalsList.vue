@@ -12,8 +12,7 @@ defineProps({
     <Interval
         v-for="(interval, index) in intervals"
         :key="index"
-        :type="interval.type"
-        :length="interval.length"
+        :interval
         :class="interval.finished ? 'opacity-30' : 'opacity-100'"
     />
 </div>
