@@ -1,5 +1,6 @@
 <script setup>
 import { useIntervalsStore } from '~/useIntervalsStore.js';
+import IntervalsList from '~/components/IntervalsList.vue';
 
 const intervalsStore = useIntervalsStore();
 const { upcomingIntervals, finishedIntervals } = storeToRefs(intervalsStore);
@@ -34,25 +35,9 @@ useHead({ title: 'Interval 🏃🏼‍♂️' });
         </div>
 
         <h2 v-if="upcomingIntervals.length" class="p-3 font-bold text-xl">To Do</h2>
-        <div class="grid grid-cols-2 gap-2">
-            <Interval
-                v-for="(interval, index) in upcomingIntervals"
-                :key="index"
-                :type="interval.type"
-                :length="interval.length"
-                class="px-4"
-            />
-        </div>
+        <IntervalsList :intervals="upcomingIntervals" />
 
         <h2 v-if="finishedIntervals.length" class="p-3 font-bold text-xl">Done</h2>
-        <div class="grid grid-cols-2 gap-2">
-            <Interval
-                v-for="(interval, index) in finishedIntervals"
-                :key="index"
-                :type="interval.type"
-                :length="interval.length"
-                class="px-4 opacity-70"
-            />
-        </div>
+        <IntervalsList :intervals="finishedIntervals" />
     </div>
 </template>
