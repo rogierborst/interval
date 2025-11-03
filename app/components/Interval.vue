@@ -11,7 +11,6 @@ const props = defineProps({
 const background = computed(() => [
     { 'bg-lime-800' : props.interval.type === 'walk' },
     { 'bg-rose-800' : props.interval.type === 'run' },
-    { 'ring-4 ring-white' : props.interval.isActive },
 ])
 
 const text = computed(() => [
@@ -29,7 +28,7 @@ const nowIndicator = computed(() => {
 </script>
 
 <template>
-    <div class="relative rounded" :class="background">
+    <div class="relative rounded cursor-default" :class="background">
         <div
             v-if="interval.isActive"
             class="indicator"

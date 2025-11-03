@@ -34,10 +34,21 @@ const handleClick = () => {
 </script>
 
 <template>
-    <div
-        class="bg-stone-900 border border-stone-950 rounded-md px-3 py-6 text-center"
-        @click="handleClick"
-    >
-        <div class="text-6xl font-bold font-time" :class="color" v-text="time" />
+    <div class="counter-window" @click="handleClick">
+        <div class="counter-text" :class="color" v-text="time" />
     </div>
 </template>
+
+<style scoped>
+.counter-window {
+    @apply bg-stone-900 border border-stone-950;
+    @apply rounded-md;
+    @apply px-3 py-6 text-center;
+    @apply cursor-pointer;
+}
+
+.counter-text {
+    @apply text-6xl font-bold font-time;
+    text-shadow: 0 0 20px rgba(255 255 255 / 0.8);
+}
+</style>
