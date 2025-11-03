@@ -22,6 +22,7 @@ export const useWorkoutController = () => {
      */
     const selectNext = () => {
         intervalsStore.activateNextInterval();
+        timer.pause();
         timer.setTime(activeInterval.value?.length ?? 0);
     }
 
@@ -39,7 +40,8 @@ export const useWorkoutController = () => {
      */
     const resetWorkout = () => {
         intervalsStore.resetIntervals();
-        timer.reset();
+        intervalsStore.activeIntervalIndex = -1;
+        selectNext();
     }
 
     // Auto-move to next interval when finished
