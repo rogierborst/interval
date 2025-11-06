@@ -33,6 +33,6 @@ useHead({ title: 'Interval 🏃🏼‍♂️' });
             />
         </div>
 
-        <IntervalsList :intervals />
+        <IntervalsList :intervals class="p-4" />
     </div>
 </template>
