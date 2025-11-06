@@ -8,7 +8,7 @@ export const useTimer = () => {
     let frameId = null;
 
     const isFinished = computed(() => remaining.value <= 0);
-    const formatted = computed(() => formatTime(remaining.value));
+    const formatted = computed(() => formatTime(remaining.value, true));
 
     const setTime = (seconds) => {
         const ms = seconds * 1000;
