@@ -1,6 +1,18 @@
-# Nuxt Minimal Starter
+# Interval App
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+## Running as PWA:
+
+Use ngrok:
+
+`npm run build`
+
+`npm run preview`
+
+Then, in another tab:
+
+`npx ngrok http 3000`
+
+Use the ngrok url displayed in the terminal to connect to a https version of the app
 
 ## Setup
 

@@ -16,7 +16,12 @@ const toggleTimer = () => {
     }
 }
 
-useHead({ title: 'Interval 🏃🏼‍♂️' });
+useHead({
+    title: 'Interval 🏃🏼‍♂️',
+    link: [
+        {rel: 'manifest', href: '/manifest.webmanifest' }
+    ]
+});
 </script>
 
 <template>
